@@ -17,8 +17,12 @@ import datetime
 @login_required
 def index(request):
     client_count = Clients.objects.count()
-    male_count = Clients.objects.filter(sexe='H').count() / client_count * 100
-    female_count = 100 - male_count
+    if client_count != 0:
+        male_count = Clients.objects.filter(sexe='H').count() / client_count * 100
+        female_count = 100 - male_count
+    else:
+        male_count = 0
+        female_count = 0
     last_clients = Clients.objects.all().order_by('-id')[:5]
 
     age_list = pd.DataFrame(list(Clients.objects.all().values('naissance')))
