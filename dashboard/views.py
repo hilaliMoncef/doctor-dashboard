@@ -30,8 +30,8 @@ def index(request):
         male_count = 0
         female_count = 0
         age_list = 0
-        ages = 0
-        num_ages = 0
+        ages = []
+        num_ages = []
     last_clients = Clients.objects.all().order_by('-id')[:5]
 
     return render(request, 'index.html', locals())
