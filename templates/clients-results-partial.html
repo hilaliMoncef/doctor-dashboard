@@ -7,7 +7,7 @@
         </div>
         <div class="ml-1 d-flex flex-column">
             <span>{{ client.prenom|capfirst }} {{ client.nom|capfirst }}</span>
-            <small class="text-muted">{{ client.age }} ans</small>
+            <small class="text-muted">{{ client.age }} {% if client.age != '-' %}ans{% endif %}</small>
         </div>
     </a>
     {% endfor %}

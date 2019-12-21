@@ -75,9 +75,15 @@
                                 {{ client.sexe }}
                             </div>
                         </td>
-                        <td>{{ client.naissance|age }} ans</td>
+                        <td>{{ client.age }} {% if client.age != '-' %}ans{% endif %}</td>
                         <td>{{ client.telephone }}</td>
-                        <td>{{ client.date_rdv }} {{ client.heure_rdv }}</td>
+                        <td>
+                            {% if client.date_rdv %}
+                                {{ client.date_rdv }} {{ client.heure_rdv }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
                         <td>{{ client.motif }}</td>
                         <td>
                             {% if client.comment %}

@@ -3,6 +3,7 @@ import datetime
 
 register = template.Library()
 
+
 def age(bday, d=None):
     if d is None:
         d = datetime.date.today()

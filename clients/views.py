@@ -27,7 +27,7 @@ def edit(request, id):
         form = ClientForm(request.POST, instance=client)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Le patient {} {} a été modifié.'.formt(form.cleaned_data['nom'], form.cleaned_data['prenom']))
+            messages.success(request, 'Le patient {} {} a été modifié.'.format(form.cleaned_data['nom'], form.cleaned_data['prenom']))
             return redirect('clients')
 
     form = ClientForm(instance=client)

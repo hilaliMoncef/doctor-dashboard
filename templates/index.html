@@ -70,7 +70,7 @@
                                                     <td>{{ client.nom|capfirst }}</td>
                                                     <td>{{ client.prenom|capfirst }}</td>
                                                     <td>{{ client.motif|capfirst }}</td>
-                                                    <td>{{ client.age }} ans</td>
+                                                    <td>{{ client.age }} {% if client.age != '-' %}ans{% endif %}</td>
                                                     <td>{{ client.telephone }}</td>
                                                 </tr>
                                                 {% endfor %}
