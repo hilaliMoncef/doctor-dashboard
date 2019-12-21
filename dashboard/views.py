@@ -20,17 +20,20 @@ def index(request):
     if client_count != 0:
         male_count = Clients.objects.filter(sexe='H').count() / client_count * 100
         female_count = 100 - male_count
+        age_list = pd.DataFrame(list(Clients.objects.all().values('naissance')))
+        age_list = pd.to_datetime(age_list['naissance'])
+        age_list = age_list.apply(calculate_age)
+        age_list = age_list.groupby(age_list).count()
+        ages = age_list.index
+        num_ages = age_list.values
     else:
         male_count = 0
         female_count = 0
+        age_list = 0
+        ages = 0
+        num_ages = 0
     last_clients = Clients.objects.all().order_by('-id')[:5]
 
-    age_list = pd.DataFrame(list(Clients.objects.all().values('naissance')))
-    age_list = pd.to_datetime(age_list['naissance'])
-    age_list = age_list.apply(calculate_age)
-    age_list = age_list.groupby(age_list).count()
-    ages = age_list.index
-    num_ages = age_list.values
     return render(request, 'index.html', locals())
 
 def search(request):
