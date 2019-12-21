@@ -21,7 +21,7 @@ def index(request):
         male_count = Clients.objects.filter(sexe='H').count() / client_count * 100
         female_count = 100 - male_count
         age_list = pd.DataFrame(list(Clients.objects.all().values('naissance')))
-        age_list = pd.to_datetime(age_list['naissance'])
+        age_list = pd.to_datetime(age_list['naissance'], errors='coerce')
         age_list = age_list.apply(calculate_age)
         age_list = age_list.groupby(age_list).count()
         ages = age_list.index
