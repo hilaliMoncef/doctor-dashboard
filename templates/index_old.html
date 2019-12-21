@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+
+{% block 'page_title' %}Accueil{% endblock %}
+
+{% block 'content' %}
+<div class="content">
+    <div class="container-fluid">
+        <div class="alert alert-danger">
+            <button type="button" aria-hidden="true" class="close">×</button>
+            <span><b> Erreur - </b> Impossible de modifier le patient. Veuillez vérifier les informations.</span>
+        </div>
+        <div style="margin-bottom: 15px; display: flex; align-items: center; justify-content: space-between;">
+            <form style="flex: 1; margin-right: 20px;">
+                <div class="" style="display: flex; align-items: center;">
+                    <input type="text" name="search_text" id="search_text" placeholder="Rechercher.."
+                           class="form-control"/>
+                </div>
+
+            </form>
+            <a href="{% url 'add_client' %}" class="btn btn-success"><i class="ti-plus"></i> Ajouter un client</a>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">Clients</h4>
+                        <p class="category">Tous les clients enregistrés sur la base de données</p>
+                    </div>
+
+                    <div id="client_table" class="content table-responsive table-full-width">
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% if clients %}
+<ul class="list-group list-group-flush">
+    {% for client in clients %}
+    <a href="{% url 'edit_client' id=client.id %}" class="list-group-item list-group-item-action py-2 px-3 d-flex align-center">
+        <div class="text-white mr-2 sexe {% if client.sexe == 'H' %}homme{% else %}femme{% endif %}">
+            {{ client.sexe }}
+        </div>
+        <div class="ml-1 d-flex flex-column">
+            <span>{{ client.prenom|capfirst }} {{ client.nom|capfirst }}</span>
+            <small class="text-muted">{{ client.age }} ans</small>
+        </div>
+    </a>
+    {% endfor %}
+</ul>
+{% else %}
+
+{% endif %}

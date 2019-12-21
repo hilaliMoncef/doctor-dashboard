@@ -1,0 +1,118 @@
+{% extends 'layout.html' %}
+
+{% block 'content' %}
+<!-- ============================================================== -->
+<!-- pageheader  -->
+<!-- ============================================================== -->
+<div class="row">
+    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="page-header">
+            <div class="d-flex align-items-center justify-content-between">
+                <h2 class="pageheader-title">Base de données patient </h2>
+                <a href="{% url 'add_client' %}" class="btn btn-primary pageheader-btn d-flex align-items-center"><i class="fas fa-plus-circle mr-2"></i> <span>Ajouter un patient</span></a>
+            </div>
+            <div class="page-breadcrumb">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Patients</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Liste des patients</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endfor %}
+{% endif %}
+
+{% load calculate_age %}
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <h5 class="card-header d-flex justify-content-between align-items-center">
+                <div>Liste des patients</div>
+                <div>
+                    <div class="input-group">
+                        <input type="text" id="big-search" placeholder="Rechercher.." class="form-control">
+                        <div class="input-group-append"><span class="input-group-text"><i class="fas fa-search"></i></span></div>
+                    </div>
+                </div>
+            </h5>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Prénom</th>
+                        <th scope="col">Sexe</th>
+                        <th scope="col">Age</th>
+                        <th scope="col">Téléphone</th>
+                        <th scope="col">Rendez-vous</th>
+                        <th scope="col">Motif de consultation</th>
+                        <th scope="col">Commentaires</th>
+                        <th scope="col">Editer</th>
+                        <th scope="col">Suppr</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for client in clients %}
+                    <tr>
+                        <th scope="row">{{ client.id }}</div></th>
+                        <td>{{ client.nom|capfirst }}</td>
+                        <td>{{ client.prenom|capfirst }}</td>
+                        <td>
+                            <div class="text-white sexe {% if client.sexe == 'H' %}homme{% else %}femme{% endif %}">
+                                {{ client.sexe }}
+                            </div>
+                        </td>
+                        <td>{{ client.naissance|age }} ans</td>
+                        <td>{{ client.telephone }}</td>
+                        <td>{{ client.date_rdv }} {{ client.heure_rdv }}</td>
+                        <td>{{ client.motif }}</td>
+                        <td>
+                            {% if client.comment %}
+                                {{ client.comment }}
+                            {% else %}
+                                Aucun commentaire.
+                            {% endif %}
+                        </td>
+                        <td><a href="{% url 'edit_client' id=client.id %}" class="text-warning"><i class="fas fa-pen-square"></i></a></td>
+                        <td><a href="#" class="text-danger" data-toggle="modal" data-target="#confirmModal-{{ client.id }}"><i class="fas fa-minus-circle"></i></a></td>
+                    </tr>
+                    <div class="modal fade" id="confirmModal-{{ client.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Confirmation</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Voulez-vous supprimer le patient <strong>{{ client.nom|capfirst }} {{ client.prenom|capfirst }}</strong> ?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                    <a href="{% url 'delete_client' id=client.id %}" class="btn btn-primary">Confirmer</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

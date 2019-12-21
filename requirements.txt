@@ -1,0 +1,8 @@
+Django==2.2.2
+django-tempus-dominus==5.1.2.6
+numpy==1.17.0
+pandas==0.25.1
+python-dateutil==2.8.0
+pytz==2019.1
+six==1.12.0
+sqlparse==0.3.0

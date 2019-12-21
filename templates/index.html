@@ -1,0 +1,182 @@
+{% extends 'layout.html' %}
+{% block 'content' %}
+
+                <!-- ============================================================== -->
+                <!-- pageheader  -->
+                <!-- ============================================================== -->
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="page-header">
+                            <h2 class="pageheader-title">Tableau de bord </h2>
+                            <div class="page-breadcrumb">
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="#" class="breadcrumb-link">Accueil</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Tableau de bord</li>
+                                    </ol>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ============================================================== -->
+                <!-- end pageheader  -->
+                <!-- ============================================================== -->
+                <div class="ecommerce-widget">
+
+                    <div class="row">
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="text-muted">Nombre de patients</h5>
+                                    <div class="metric-value d-inline-block">
+                                        <h1 class="mb-1">{{ client_count }} patients</h1>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- ============================================================== -->
+                        <!-- recent orders  -->
+                        <!-- ============================================================== -->
+                        <div class="col-xl-9 col-lg-12 col-md-6 col-sm-12 col-12">
+                            <div class="card">
+                                <h5 class="card-header">Patients récents</h5>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead class="bg-light">
+                                                <tr class="border-0">
+                                                    <th class="border-0">#</th>
+                                                    <th scope="col">Sexe</th>
+                                                    <th scope="col">Nom</th>
+                                                    <th scope="col">Prénom</th>
+                                                    <th scope="col">Motif de consultation</th>
+                                                    <th scope="col">Age</th>
+                                                    <th scope="col">Téléphone</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% load calculate_age %}
+                                                {% for client in last_clients %}
+                                                <tr>
+                                                    <td>{{ client.id }}</td>
+                                                    <td>
+                                                        <div class="text-white sexe {% if client.sexe == 'H' %}homme{% else %}femme{% endif %}">
+                                                            {{ client.sexe }}
+                                                        </div>
+                                                    </td>
+                                                    <td>{{ client.nom|capfirst }}</td>
+                                                    <td>{{ client.prenom|capfirst }}</td>
+                                                    <td>{{ client.motif|capfirst }}</td>
+                                                    <td>{{ client.age }} ans</td>
+                                                    <td>{{ client.telephone }}</td>
+                                                </tr>
+                                                {% endfor %}
+                                                <tr>
+                                                    <td colspan="9"><a href="{% url 'clients' %}" class="btn btn-outline-light float-right">Voir pluscd</a></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ============================================================== -->
+                        <!-- end recent orders  -->
+
+
+                        <!-- ============================================================== -->
+                        <!-- customer acquistion  -->
+                        <!-- ============================================================== -->
+                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="card">
+                                <h5 class="card-header">
+                                    <span>Caméra de surveillance</span>
+                                </h5>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-6 bg-dark border cctv"></div>
+                                        <div class="col-6 bg-dark border cctv"></div>
+                                        <div class="col-6 bg-dark border cctv"></div>
+                                        <div class="col-6 bg-dark border cctv"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ============================================================== -->
+                        <!-- end customer acquistion  -->
+                        <!-- ============================================================== -->
+                    </div>
+                    <div class="row">
+                        <!-- ============================================================== -->
+                        <!-- product category  -->
+                        <!-- ============================================================== -->
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="card">
+                                <h5 class="card-header"> Statistiques de genre</h5>
+                                <div class="card-body">
+                                    <div id="c3chart_sexe"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="card">
+                                <h5 class="card-header"> Statistiques d'âge</h5>
+                                <div class="card-body">
+                                    <div id="c3chart_age"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ============================================================== -->
+                        <!-- end product category  -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endblock %}
+
+    {% block 'javascript' %}
+    <script>
+            if($('#c3chart_sexe').length) {
+                var chart=c3.generate( {
+                    bindto:"#c3chart_sexe", data: {
+                        columns:[['Homme', {{ male_count }}], ['Femme', {{ female_count }}], ], type:'donut', onclick:function(d, i) {
+                            console.log("onclick", d, i);
+                        }
+                    }
+                    , donut: {
+                        title: "H/F"
+                    }
+                }
+                );
+            }
+            if($('#c3chart_age').length) {
+                var chart=c3.generate( {
+                    bindto:"#c3chart_age", data: {
+                        x: 'x',
+                        columns:[
+                            ['x' {% for age in ages %}, '{{ age }}'{% endfor %}],
+                            ['Ages' {% for num in num_ages %}, {{ num }}{% endfor %}]
+                        ],
+                        type:'bar',
+                        groups:[['Ages']]
+                    }
+                    , axis: {
+                        y: {
+                            show: true,
+                        }
+                        , x: {
+                            show: true,
+                            tick: {
+                                values: [{% for age in ages %}{{ age }},{% endfor %}]
+                            }
+                        }
+                    }
+                }
+                );
+            }
+    </script>
+    {% endblock %}
